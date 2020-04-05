@@ -1,9 +1,7 @@
-<center>
-<h1>chknet capture</h1>
-<i> :credit_card: capture chknet credit cards</i>
+<h1 align="center">chknet capture</h1>
+<p align="center"> :credit_card: capture chknet credit cards</p>
 
-<small>This is a study-only project. I am not responsible for its use :)</small>
-
+<p  align="center">This is a study-only project. I am not responsible for its use :)</p>
 </center>
 
 ## Installing dependencies
@@ -11,15 +9,19 @@
 ```shell
 > pip install -r requirements.txt
 
-
-[chknet-capture] 4xxxxxxxxxxxxxxx xxxx xxx - x.xx$ - 00 Approved
-[chknet-capture] 5xxxxxxxxxxxxxxx xxxx xxx - x.xx$ - 00 Approved
 ```
 
 ## Execution
 
 ```shell
 > python main.py
+
+[chknet-capture] 4xxxxxxxxxxxxxxx xxxx xxx - x.xx$ - 00 Approved
+[chknet-capture] 5xxxxxxxxxxxxxxx xxxx xxx - x.xx$ - 00 Approved
+
+...
+
+[!] Credit cards were dumped to ccs_15_18_22.txt
 ```
 
 ## Automation
