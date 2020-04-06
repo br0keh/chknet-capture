@@ -1,7 +1,18 @@
-<p align="center"><img height="90px" src="https://i.postimg.cc/4dngkhjd/chknet-capture-logo.png" /></p>
-<h1 align="center">chknet capture</h1>
-<p align="center"> :credit_card: capture chknet credit cards</p>
 
+<p align="center">
+    <img alt="chknet-capture" src=https://i.postimg.cc/4dngkhjd/chknet-capture-logo.png" width="60" />
+  
+</p>
+<h1 align="center">
+  chknet-capture
+</h1>
+
+<h3 align="center">
+  :credit_card: 📄 🚀
+</h3>
+<h3 align="center">
+  capture chknet credit cards
+</h3>
 <p  align="center">This is a study-only project. I am not responsible for its use :)</p>
 </center>
 
