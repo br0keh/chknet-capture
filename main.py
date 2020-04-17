@@ -53,14 +53,17 @@ time.sleep(5)  # wait chknet app load
 
 channels = driver.find_elements_by_css_selector('.channel-list-item')
 
+print("[!] Connected with chknet!")
+
 for channel in channels:
     if channel.get_attribute('data-name') == channel_name:
         channel.click()
+        print("[!] Joined #unix")
         break
 
 
 # GRAB CC'S
-approved_cc_regex = r"[0-9]{15,16}\s[0-9]{4}\s[0-9]{3,4}(.*)Approved"
+approved_cc_regex = r"[0-9]{15,16}\s[0-9]{2}[/ ][0-9]{2}\s[0-9]{3,4}\s[a-zA-Z ]{4,10}\s[a-zA-Z ]{4,12}|[0-9]{15,16}\s[0-9]{4}\s[0-9]{3,4}(.*)Approved"
 ccs = []
 
 
@@ -74,29 +77,34 @@ def save():
     print("[!] Credit cards were dumped to %s" % (filepath))
 
 
-try:
-    while driver.page_source:
-        approveds = re.finditer(
-            approved_cc_regex, driver.page_source, re.MULTILINE)
-        approveds = [approved.group() for approved in approveds]
+def grab():
+    try:
+        while driver.page_source:
+            approveds = re.finditer(
+                approved_cc_regex, driver.page_source, re.MULTILINE)
+            approveds = [approved.group() for approved in approveds]
 
-        for approved in approveds:
-            if approved not in list(ccs):
-                print("[chknet-capture] %s" % approved)
-                ccs.append(approved)
+            for approved in approveds:
+                if approved not in list(ccs):
+                    print("[chknet-capture] %s" % approved)
+                    ccs.append(approved)
 
-        time.sleep(3)
+            time.sleep(3)
 
-except KeyboardInterrupt:
-    if len(ccs) > 0:
-        save()
-    enabled = False
-    driver.quit()
-    exit()
-except Exception as e:
-    if len(ccs) > 0:
-        save()
-    enabled = False
-    driver.quit()
+    except KeyboardInterrupt:
+        if len(ccs) > 0:
+            save()
+        enabled = False
+        driver.quit()
+        exit()
+    except Exception as e:
+        if len(ccs) > 0:
+            save()
+        enabled = False
+        driver.quit()
 
-    print("[!] An error occurred during the process: %s" % str(e.__str__))
+        print("[!] An error occurred during the process: %s" % str(e.__str__))
+
+
+t = threading.Thread(target=grab)
+t.start()
