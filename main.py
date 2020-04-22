@@ -18,16 +18,18 @@ bot_name = "%s%i" % (''.join(random.choices(
 
 # DRIVER
 driver_options = webdriver.ChromeOptions()
-driver_options.add_argument('--headless')
+driver_options.headless = True
 driver_options.add_argument('--silent')
 driver_options.add_experimental_option("excludeSwitches", ["enable-logging"])
 driver = webdriver.Chrome(chrome_options=driver_options)
 
 
 try:
+    print("[!] Connecting to chknet...")
     driver.get(CHKNET)
     time.sleep(3)
     driver.find_element_by_id('viewport')
+
 except:
     print("[!] Error trying to connect to webchknet")
 
@@ -50,11 +52,8 @@ time.sleep(5)  # wait chknet app load
 
 
 # GO TO #UNIX CHANNEL
-
 channels = driver.find_elements_by_css_selector('.channel-list-item')
-
 print("[!] Connected with chknet!")
-
 for channel in channels:
     if channel.get_attribute('data-name') == channel_name:
         channel.click()
@@ -63,7 +62,7 @@ for channel in channels:
 
 
 # GRAB CC'S
-approved_cc_regex = r"[0-9]{15,16}\s[0-9]{2}[/ ][0-9]{2}\s[0-9]{3,4}\s[a-zA-Z ]{4,10}\s[a-zA-Z ]{4,12}|[0-9]{15,16}\s[0-9]{4}\s[0-9]{3,4}(.*)Approved"
+approved_cc_regex = r"[0-9]{15,16}\s[0-9]{4}\s[0-9]{3,4}\s\-\s.*\s\-\sApproved"
 ccs = []
 
 
@@ -76,10 +75,13 @@ def save():
 
     print("[!] Credit cards were dumped to %s" % (filepath))
 
+    time.sleep(4)
+
 
 def grab():
-    try:
-        while driver.page_source:
+
+    while driver.page_source:
+        try:
             approveds = re.finditer(
                 approved_cc_regex, driver.page_source, re.MULTILINE)
             approveds = [approved.group() for approved in approveds]
@@ -90,20 +92,21 @@ def grab():
                     ccs.append(approved)
 
             time.sleep(3)
+        except KeyboardInterrupt:
+            if len(ccs) > 0:
+                save()
+            enabled = False
+            driver.quit()
+            exit()
 
-    except KeyboardInterrupt:
-        if len(ccs) > 0:
-            save()
-        enabled = False
-        driver.quit()
-        exit()
-    except Exception as e:
-        if len(ccs) > 0:
-            save()
-        enabled = False
-        driver.quit()
+        except Exception as e:
+            if len(ccs) > 0:
+                save()
+            enabled = False
+            driver.quit()
 
-        print("[!] An error occurred during the process: %s" % str(e.__str__))
+    print("[!] An error occurred during the process: %s" % str(e.__str__))
+    exit()
 
 
 t = threading.Thread(target=grab)
